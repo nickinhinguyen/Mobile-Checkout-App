@@ -1,6 +1,7 @@
 
 const initialState = {
-    cart: []
+    cart: [],
+    itemCount: 0
 }
 
 export default function(state=initialState, action) {
@@ -14,14 +15,16 @@ export default function(state=initialState, action) {
               }
             return {
                 ...state,
-                cart: [item, ...state.cart]
+                cart: [item, ...state.cart],
+                itemCount: state.itemCount +1
             }
         
         case 'REMOVE_FROM_CART':
             const id = action.payload
             return {
                 ...state,
-                cart: state.cart.filter((card) => card.id !== id)
+                cart: state.cart.filter((card) => card.id !== id),
+                itemCount: state.itemCount - 1
             }
         default:
             

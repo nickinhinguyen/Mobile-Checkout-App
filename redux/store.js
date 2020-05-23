@@ -2,6 +2,7 @@ import { createStore } from 'redux';
 import reducer from './reducer.js';
 
 const initialState = {
-    cart:[]
+    cart:[],
+    itemCount: 0
 };
 export default createStore(reducer, initialState);

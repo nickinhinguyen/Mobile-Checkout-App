@@ -4,6 +4,12 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Zocial } from '@expo/vector-icons';
 import ShoppingCartScreen from './ShoppingCartScreen';
 import HomeScreen from './HomeScreen';
+import {connect} from 'react-redux';
+
+const mapStateToProps = (state) => ({
+    cart: state.cart,
+    itemCount: state.itemCount
+});
 
 class MyTabs extends Component {
     
@@ -35,7 +41,7 @@ class MyTabs extends Component {
             name="ShoppingCart"
             component={ShoppingCartScreen}
             options={{
-            tabBarBadge: 4,
+            tabBarBadge: this.props.itemCount,
             tabBarLabel: 'My Cart',
             tabBarIcon: ({ color }) => (
                 <Zocial name="cart" color={color} size={26} />
@@ -49,4 +55,6 @@ class MyTabs extends Component {
     );
     };}
 
-    export default MyTabs;
+    export default connect (mapStateToProps,null)(MyTabs);
+
+

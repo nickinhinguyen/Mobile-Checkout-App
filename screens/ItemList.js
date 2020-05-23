@@ -1,12 +1,25 @@
 import React, { Component } from "react";
 import { View, StyleSheet,Text, Image, TouchableOpacity } from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
+import {connect} from 'react-redux'
+
+// function mapispatchtoProps(dispatch){
+//   return{
+//     addItemsToCart : () => dispatch ({type:'ADD_TO_CART',payload:item})
+//   }
+// };
+
+function mapDispatchtoProps(dispatch){
+  return{
+    addItemsToCart : (item) => dispatch ({type:'ADD_TO_CART',payload:item}) 
+  }
+};
 
 class ItemList extends Component {
 
-  
   render() {
-    const { imageUri, name, priceOne, priceTwo } = this.props;
+    // const { imageUri, name, priceOne, priceTwo } = this.props;
+    const {item} = this.props;
     return (
         <View
           style={styles.container}
@@ -19,7 +32,7 @@ class ItemList extends Component {
             }}
           >
             <Image
-              source={imageUri}
+              source={item.imageUri}
               style={styles.image}
             />
           </View>
@@ -31,7 +44,7 @@ class ItemList extends Component {
             <Text
               style={styles.title}
             >
-              {name}
+              {item.name}
             </Text>
             <View
               style={{
@@ -43,22 +56,22 @@ class ItemList extends Component {
               <Text
                 style={styles.priceOne}
               >
-                ${priceOne}
+                ${item.priceOne}
               </Text>
               <Text
                 style={styles.priceTwo}
               >
-                {priceTwo}
+                {item.priceTwo}
               </Text>
             </View>
-            <TouchableOpacity style={
+            <TouchableOpacity onPress={()=> this.props.addItemsToCart(item)} style={
                 {borderRadius: 30,
-                margin: 10,
+                margin: 5,
                 backgroundColor: "#f3d23d",
                 alignItems: "center",
                 color: "#fff"}
             } >
-                <Text >Add item</Text>
+                <Text style={{padding:5, alignItems:"center", fontSize:16}} >Add item</Text>
             </TouchableOpacity> 
           </View>
         </View>
@@ -67,7 +80,7 @@ class ItemList extends Component {
   }
 }
 
-export default ItemList;
+export default connect (null,mapDispatchtoProps) (ItemList);
 
 const styles = StyleSheet.create({
     container: {

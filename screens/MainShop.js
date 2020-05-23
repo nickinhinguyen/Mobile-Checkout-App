@@ -6,6 +6,7 @@ import ShoppingCartScreen from './ShoppingCartScreen';
 import HomeScreen from './HomeScreen';
 
 class MyTabs extends Component {
+    
     render() {
 
     const Tab = createMaterialBottomTabNavigator();

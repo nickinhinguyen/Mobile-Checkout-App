@@ -2,43 +2,31 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions, FlatList,Image} from 'react-native';
 import {Header} from 'react-native-elements';
 import { Component } from "react";
-const PRODUCTS = [
-    {
-      id: 1,
-      imageUri: require("../assets/books/C_programming.jpg"),
-      title: "C Programming",
-      priceOne: 120,
-      priceTwo: "$180"
-    },
-    {
-      id: 2,
-      imageUri: require("../assets/books/confident_coding.jpg"),
-      title: "Confident Coding",
-      priceOne: 180,
-      priceTwo: null
-    },
-    {
-      id: 3,
-      imageUri: require("../assets/books/happy_lemon.jpeg"),
-      title: "Happy Lemon",
-      priceOne: 80,
-      priceTwo: null
+import {connect} from 'react-redux';
+// const PRODUCTS = [
+//     {
+//       id: 1,
+//       imageUri: require("../assets/books/C_programming.jpg"),
+//       title: "C Programming",
+//       priceOne: 120,
+//       priceTwo: "$180"
+//     }
+//   ];
+const mapStateToProps = (state) => ({
+    cart: state.cart
+});
+function mapDispatchtoProps(dispatch){
+    return{
+      removeItemFromCart : (item) => dispatch ({type:'REMOVE_FROM_CART',payload:item}) 
     }
-  ];
+  };
+
 
 class ShoppingCartScreen extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            cartArray: []
-        }
-    }
-   
+    
     render() {
         const {
-            main, checkoutButton, wrapper, checkoutTitle, titleStyle,
-            productContainer, productImage,productStyle, lastRowInfo,
-            txtName, txtPrice, Image, mainRight, txtShowDetail
+            main, checkoutButton, wrapper, checkoutTitle
          } = styles;
          return (
              
@@ -52,40 +40,10 @@ class ShoppingCartScreen extends Component {
                     contentContainerStyle={main}
                     enableEmptySections
                     // dataSource={new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }).cloneWithRows(cartArray)}
-                    data = {PRODUCTS}
-                    renderItem={({ item }) => <Item title={item.title} imageUri={item.imageUri} price={item.priceOne}/>}
+                    data = {this.props.cart}
+                    renderItem={({item }) => <Item title={item.title} imageUri={item.imageUri} price={item.priceOne} id={item.id}removeItem={this.props.removeItemFromCart} />}
                     keyExtractor={item => item.id}
-                        // <View style={productStyle}>
-                        //     {/* <Image source={{ uri: `${url}${cartItem.product.images[0]}` }} style={productImage} /> */}
-                        //     <Image source={cartItem.imageUri}  style={productImage} />
-
-                            
-                        //     <View style={[mainRight]}>
-                        //         <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
-                        //             {/* <Text style={txtName}>{toTitleCase(cartItem.title)}</Text> */}
-                        //             <Text style={txtName}>{cartItem.title}</Text>
-                        //             <TouchableOpacity onPress={() => this.removeProduct(cartItem.id)}>
-                        //                 <Text style={{ fontFamily: 'Avenir', color: '#969696' }}>X</Text>
-                        //             </TouchableOpacity>
-                        //         </View>
-                        //         <View>
-                        //             {/* <Text style={txtPrice}>{cartItem.product.price}$</Text> */}
-                        //             <Text style={txtPrice}>$100</Text>
-                                    
-                        //         </View>
-                        //         {/* <View style={productController}>
-                        //             <View style={numberOfProduct}>
-                        //                 <TouchableOpacity onPress={() => this.incrQuantity(cartItem.product.id)}>
-                        //                     <Text>+</Text>
-                        //                 </TouchableOpacity>
-                        //                 <Text>{cartItem.quantity}</Text>
-                        //                 <TouchableOpacity onPress={() => this.decrQuantity(cartItem.product.id)}>
-                        //                     <Text>-</Text>
-                        //                 </TouchableOpacity>
-                        //             </View>
-                        //         </View> */}
-                        //     </View>
-                        // </View>
+                       
                 />
                 {/* <TouchableOpacity style={checkoutButton} onPress={this.onSendOrder.bind(this)}> */}
                 <TouchableOpacity style={checkoutButton} >
@@ -97,9 +55,8 @@ class ShoppingCartScreen extends Component {
 }}
 
 
-export default ShoppingCartScreen;
+function Item({title, imageUri, price, id,removeItem}) {
 
-function Item({title, imageUri, price }) {
     return (
         <View style={styles.productStyle}>
         {/* <Image source={{ uri: `${url}${cartItem.product.images[0]}` }} style={productImage} /> */}
@@ -110,7 +67,7 @@ function Item({title, imageUri, price }) {
             <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
                 {/* <Text style={txtName}>{toTitleCase(cartItem.title)}</Text> */}
                 <Text style={styles.txtName}>{title}</Text>
-                <TouchableOpacity onPress={() => this.removeProduct(cartItem.id)}>
+                <TouchableOpacity onPress={() => removeItem(id)}>
                     <Text style={{  color: '#969696' }}>X</Text>
                 </TouchableOpacity>
             </View>
@@ -120,6 +77,7 @@ function Item({title, imageUri, price }) {
                 
             </View>
             {/* <View style={productController}>
+            
                 <View style={numberOfProduct}>
                     <TouchableOpacity onPress={() => this.incrQuantity(cartItem.product.id)}>
                         <Text>+</Text>
@@ -133,7 +91,9 @@ function Item({title, imageUri, price }) {
         </View>
     </View>
     );
-  }
+  };
+
+export default connect (mapStateToProps,mapDispatchtoProps)(ShoppingCartScreen);
 
 const { width } = Dimensions.get('window');
 const imageWidth = width / 4;

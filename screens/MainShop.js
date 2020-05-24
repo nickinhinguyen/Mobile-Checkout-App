@@ -2,13 +2,19 @@ import React,{ Component } from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Zocial } from '@expo/vector-icons';
-import ShoppingCartScreen from './ShoppingCartScreen';
+import CheckoutNavigator from './CheckoutNavigator.js';
+import PromotionScreen from './PromotionScreen';
+
 import HomeScreen from './HomeScreen';
 import {connect} from 'react-redux';
+
 
 const mapStateToProps = (state) => ({
     cart: state.cart,
 });
+
+
+
 
 class MyTabs extends Component {
     
@@ -37,9 +43,21 @@ class MyTabs extends Component {
             }}
         />
         
-        <Tab.Screen
+        {/* <Tab.Screen
             name="ShoppingCart"
             component={ShoppingCartScreen}
+            options={{
+            tabBarBadge: itemCount,
+            tabBarLabel: 'My Cart',
+            tabBarIcon: ({ color }) => (
+                <Zocial name="cart" color={color} size={26} />
+            ),
+            }}
+            
+        /> */}
+        <Tab.Screen
+            name="AppNavigator"
+            component={CheckoutNavigator}
             options={{
             tabBarBadge: itemCount,
             tabBarLabel: 'My Cart',

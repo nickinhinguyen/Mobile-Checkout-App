@@ -1,47 +1,37 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions, FlatList,Image,ScrollView} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, FlatList,Button,ScrollView} from 'react-native';
 import {Header} from 'react-native-elements';
 import { Component } from "react";
 import {connect} from 'react-redux';
 import CartItem from './CartItem.js'
-// const PRODUCTS = [
-//     {
-//       id: 1,
-//       imageUri: require("../assets/books/C_programming.jpg"),
-//       title: "C Programming",
-//       priceOne: 120,
-//       priceTwo: "$180"
-//     }
-//   ];
+
+
 const mapStateToProps = (state) => ({
-    cart: state.cart
+    cart: state.cart,
+    promo: state.promo,
+    promoCount: state.promoCount
 });
-// function mapDispatchtoProps(dispatch){
-//     return{
-//       removeItemFromCart : (item) => dispatch ({type:'REMOVE_FROM_CART',payload:item}) 
-//     }
-//   };
 
-
+function mapDispatchtoProps(dispatch){
+    return{
+      removePromo : () => dispatch ({type:'REMOVE_PROMO'}) 
+    }
+  };
 class ShoppingCartScreen extends Component {
     
     render() {
         const arrTotal = this.props.cart.map(e => e.product.priceOne * e.quantity);
         const subtotal = arrTotal.length ? arrTotal.reduce((a, b) => a + b) : 0;
         const tax = (subtotal*0.13);
-        const promo = 0;
-        const total = subtotal + tax + promo;
-
+        const discount = subtotal * (this.props.promo/100)
+        const total = subtotal + tax + discount ;
+        
         const {
-            main, checkoutButton, wrapper, checkoutTitle,summary,summaryLine
-         } = styles;
+            main, checkoutButton, wrapper, checkoutTitle,summary,summaryLine,addPromo} = styles;
          return (
              
             <View style={wrapper}>
-                 <Header
-                    centerComponent={{ text: 'MY CART', style: { color: '#000', fontSize:18 } }}
-                    containerStyle={{backgroundColor: '#FFF',}}
-            />
+                 
                 <ScrollView>
                     <View>
                         <FlatList
@@ -54,9 +44,18 @@ class ShoppingCartScreen extends Component {
                         />
                       
                     </View>
-                <View style={summary}>
-                    <Text>Add Promotion</Text>
-                </View>
+
+                <View  style={addPromo}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Promo')}>
+                        <Text style={{color:'#2ABB9C',fontWeight:'bold'}}>Add Promotion  </Text>
+                        <Text style={{color:'#000'}}>{this.props.promoCount} promo used </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.props.removePromo()}>
+                        <Text style={{color:"#0984e3"}} >remove promo</Text>
+                    </TouchableOpacity>
+                </View>   
+                
+                
                 <View style={summary} >
                     <View style={summaryLine}>
                         <Text>Order Subtotal    </Text>
@@ -68,58 +67,18 @@ class ShoppingCartScreen extends Component {
                     </View>
                     <View style={summaryLine}>
                         <Text>Promotion  </Text>
-                        <Text>${promo.toFixed(2)}</Text>
+                        <Text>${discount.toFixed(2)}</Text>
                     </View>
+                    
                 </View>
                     </ScrollView>
                 <TouchableOpacity style={checkoutButton} >
-                        <Text style={checkoutTitle}>TOTAL ${total.toFixed(2)} CHECKOUT NOW</Text>
-                    </TouchableOpacity>
+                    <Text style={checkoutTitle}>TOTAL ${total.toFixed(2)} CHECKOUT NOW</Text>
+                </TouchableOpacity>
             </View>
         );
 }}
-
-
-// function Item({title, imageUri, price, id,removeItem,}) {
-    
-
-//     return (
-//         <View style={styles.productStyle}>
-//         <Image source={imageUri}  style={styles.productImage} />
-
-        
-//         <View style={[styles.mainRight]}>
-//             <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
-//                 <Text style={styles.txtName}>{title}</Text>
-//                 <TouchableOpacity onPress={() => removeItem(id)}>
-//                     <Text style={{  color: '#0984e3' }}>remove</Text>
-//                 </TouchableOpacity>
-//             </View>
-//             <View>
-//                 <Text style={styles.txtPrice}>${price}</Text>
-                
-//             </View>
-//             <View style={styles.productController}>
-            
-//                 <View style={styles.numberOfProduct}>
-//                 <Text style={{fontWeight: 'bold'}}>quanity:</Text>
-//                     {/* <TouchableOpacity onPress={() => this.incrQuantity(cartItem.product.id)}> */}
-//                     <TouchableOpacity >
-//                         <Text style={{  color: '#0984e3', fontSize:20 }}>+</Text>
-//                     </TouchableOpacity>
-//                     <Text>1</Text>
-//                     {/* <TouchableOpacity onPress={() => this.decrQuantity(cartItem.product.id)}> */}
-//                     <TouchableOpacity >
-//                         <Text style={{  color: '#0984e3', fontSize:20 }}>-</Text>
-//                     </TouchableOpacity>
-//                 </View>
-//             </View>
-//         </View>
-//     </View>
-//     );
-//   };
-
-export default connect (mapStateToProps,null)(ShoppingCartScreen);
+export default connect (mapStateToProps,mapDispatchtoProps)(ShoppingCartScreen);
 
 const { width } = Dimensions.get('window');
 const imageWidth = width / 4;
@@ -146,6 +105,13 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: 'bold',
         // fontFamily: 'Avenir'
+    },
+    addPromo:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+        backgroundColor: '#FFFFFF',
+        margin: 10,
+        padding: 10,
     },
     summary:{
         backgroundColor: '#FFFFFF',

@@ -1,7 +1,9 @@
 
 const initialState = {
     cart: [],
-    itemCount: 0
+    itemCount: 0,
+    promo:10,
+    promoCount : 0
 }
 
 export default function(state=initialState, action) {
@@ -47,6 +49,18 @@ export default function(state=initialState, action) {
             return {
                 ...state,
                 cart: newCart
+            }
+        case 'ADD_PROMO':
+            return{
+                ...state,
+                promo: action.payload.promo,
+                promoCount : 1
+            }
+        case 'REMOVE_PROMO':
+            return{
+                ...state,
+                promo: 0,
+                promoCount : 0
             }
         default:
             

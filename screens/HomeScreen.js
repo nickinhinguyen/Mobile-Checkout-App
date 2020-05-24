@@ -22,7 +22,7 @@ import {connect} from 'react-redux'
         <View style={styles.container}>
             {/* <Text >Home</Text> */}
             <Header
-                centerComponent={{ text: 'BOOKS', style: { color: '#000', fontSize:18 } }}
+                centerComponent={{ text: 'BOOKS', style: { color: 'rgba(127,63,191,.9)', fontSize:18, fontWeight:'bold' } }}
                 containerStyle={{
                     backgroundColor: '#FFF',
                 }}

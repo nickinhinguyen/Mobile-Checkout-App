@@ -11,7 +11,7 @@ import {connect} from 'react-redux'
 
 function mapDispatchtoProps(dispatch){
   return{
-    addItemsToCart : (item) => dispatch ({type:'ADD_TO_CART',payload:item}) 
+    addItemsToCart : (item) => dispatch ({type:'ADD_TO_CART',payload:{item , quantity:1}}) 
   }
 };
 
@@ -44,7 +44,7 @@ class ItemList extends Component {
             <Text
               style={styles.title}
             >
-              {item.name}
+              {item.title}
             </Text>
             <View
               style={{
@@ -109,16 +109,19 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 18,
         color: "#63CBA7",
-        fontWeight: "bold"
+        fontWeight: "bold",
+        alignItems:"center",
+        marginHorizontal:10
       },
     priceOne:{
         fontSize: 14,
-        fontWeight: "bold"
+        fontWeight: "bold",
+        marginHorizontal:10
       },
     priceTwo: {
         fontSize: 12,
         textDecorationLine: "line-through",
-        marginLeft: 10
+        
       }
   });
 

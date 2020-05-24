@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions, FlatList,Image} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, FlatList,Image,ScrollView} from 'react-native';
 import {Header} from 'react-native-elements';
 import { Component } from "react";
 import {connect} from 'react-redux';
+import CartItem from './CartItem.js'
 // const PRODUCTS = [
 //     {
 //       id: 1,
@@ -15,18 +16,24 @@ import {connect} from 'react-redux';
 const mapStateToProps = (state) => ({
     cart: state.cart
 });
-function mapDispatchtoProps(dispatch){
-    return{
-      removeItemFromCart : (item) => dispatch ({type:'REMOVE_FROM_CART',payload:item}) 
-    }
-  };
+// function mapDispatchtoProps(dispatch){
+//     return{
+//       removeItemFromCart : (item) => dispatch ({type:'REMOVE_FROM_CART',payload:item}) 
+//     }
+//   };
 
 
 class ShoppingCartScreen extends Component {
     
     render() {
+        const arrTotal = this.props.cart.map(e => e.product.priceOne * e.quantity);
+        const subtotal = arrTotal.length ? arrTotal.reduce((a, b) => a + b) : 0;
+        const tax = (subtotal*0.13);
+        const promo = 0;
+        const total = subtotal + tax + promo;
+
         const {
-            main, checkoutButton, wrapper, checkoutTitle
+            main, checkoutButton, wrapper, checkoutTitle,summary,summaryLine
          } = styles;
          return (
              
@@ -35,65 +42,84 @@ class ShoppingCartScreen extends Component {
                     centerComponent={{ text: 'MY CART', style: { color: '#000', fontSize:18 } }}
                     containerStyle={{backgroundColor: '#FFF',}}
             />
-
-                <FlatList
-                    contentContainerStyle={main}
-                    enableEmptySections
-                    // dataSource={new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }).cloneWithRows(cartArray)}
-                    data = {this.props.cart}
-                    renderItem={({item }) => <Item title={item.title} imageUri={item.imageUri} price={item.priceOne} id={item.id}removeItem={this.props.removeItemFromCart} />}
-                    keyExtractor={item => item.id}
-                       
-                />
-                {/* <TouchableOpacity style={checkoutButton} onPress={this.onSendOrder.bind(this)}> */}
+                <ScrollView>
+                    <View>
+                        <FlatList
+                            contentContainerStyle={main}
+                            enableEmptySections
+                            data = {this.props.cart}
+                            renderItem={({item}) => <CartItem title={item.product.title} imageUri={item.product.imageUri} price={item.product.priceOne} id={item.product.id} item={item}/>}
+                            keyExtractor={item => item.id}
+                            
+                        />
+                      
+                    </View>
+                <View style={summary}>
+                    <Text>Add Promotion</Text>
+                </View>
+                <View style={summary} >
+                    <View style={summaryLine}>
+                        <Text>Order Subtotal    </Text>
+                        <Text> ${subtotal.toFixed(2)}</Text>
+                    </View >
+                    <View style={summaryLine}>
+                        <Text>Tax (13%)   </Text>
+                        <Text> ${tax.toFixed(2)}</Text>
+                    </View>
+                    <View style={summaryLine}>
+                        <Text>Promotion  </Text>
+                        <Text>${promo.toFixed(2)}</Text>
+                    </View>
+                </View>
+                    </ScrollView>
                 <TouchableOpacity style={checkoutButton} >
-                    {/* <Text style={checkoutTitle}>TOTAL {total}$ CHECKOUT NOW</Text> */}
-                    <Text style={checkoutTitle}>TOTAL $100 CHECKOUT NOW</Text>
-                </TouchableOpacity>
+                        <Text style={checkoutTitle}>TOTAL ${total.toFixed(2)} CHECKOUT NOW</Text>
+                    </TouchableOpacity>
             </View>
         );
 }}
 
 
-function Item({title, imageUri, price, id,removeItem}) {
+// function Item({title, imageUri, price, id,removeItem,}) {
+    
 
-    return (
-        <View style={styles.productStyle}>
-        {/* <Image source={{ uri: `${url}${cartItem.product.images[0]}` }} style={productImage} /> */}
-        <Image source={imageUri}  style={styles.productImage} />
+//     return (
+//         <View style={styles.productStyle}>
+//         <Image source={imageUri}  style={styles.productImage} />
 
         
-        <View style={[styles.mainRight]}>
-            <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
-                {/* <Text style={txtName}>{toTitleCase(cartItem.title)}</Text> */}
-                <Text style={styles.txtName}>{title}</Text>
-                <TouchableOpacity onPress={() => removeItem(id)}>
-                    <Text style={{  color: '#969696' }}>X</Text>
-                </TouchableOpacity>
-            </View>
-            <View>
-                {/* <Text style={txtPrice}>{cartItem.product.price}$</Text> */}
-                <Text style={styles.txtPrice}>{price}</Text>
+//         <View style={[styles.mainRight]}>
+//             <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
+//                 <Text style={styles.txtName}>{title}</Text>
+//                 <TouchableOpacity onPress={() => removeItem(id)}>
+//                     <Text style={{  color: '#0984e3' }}>remove</Text>
+//                 </TouchableOpacity>
+//             </View>
+//             <View>
+//                 <Text style={styles.txtPrice}>${price}</Text>
                 
-            </View>
-            {/* <View style={productController}>
+//             </View>
+//             <View style={styles.productController}>
             
-                <View style={numberOfProduct}>
-                    <TouchableOpacity onPress={() => this.incrQuantity(cartItem.product.id)}>
-                        <Text>+</Text>
-                    </TouchableOpacity>
-                    <Text>{cartItem.quantity}</Text>
-                    <TouchableOpacity onPress={() => this.decrQuantity(cartItem.product.id)}>
-                        <Text>-</Text>
-                    </TouchableOpacity>
-                </View>
-            </View> */}
-        </View>
-    </View>
-    );
-  };
+//                 <View style={styles.numberOfProduct}>
+//                 <Text style={{fontWeight: 'bold'}}>quanity:</Text>
+//                     {/* <TouchableOpacity onPress={() => this.incrQuantity(cartItem.product.id)}> */}
+//                     <TouchableOpacity >
+//                         <Text style={{  color: '#0984e3', fontSize:20 }}>+</Text>
+//                     </TouchableOpacity>
+//                     <Text>1</Text>
+//                     {/* <TouchableOpacity onPress={() => this.decrQuantity(cartItem.product.id)}> */}
+//                     <TouchableOpacity >
+//                         <Text style={{  color: '#0984e3', fontSize:20 }}>-</Text>
+//                     </TouchableOpacity>
+//                 </View>
+//             </View>
+//         </View>
+//     </View>
+//     );
+//   };
 
-export default connect (mapStateToProps,mapDispatchtoProps)(ShoppingCartScreen);
+export default connect (mapStateToProps,null)(ShoppingCartScreen);
 
 const { width } = Dimensions.get('window');
 const imageWidth = width / 4;
@@ -121,9 +147,20 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         // fontFamily: 'Avenir'
     },
+    summary:{
+        backgroundColor: '#FFFFFF',
+        margin: 10,
+        padding: 10,
+       
+    },
+    summaryLine:{
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
     productStyle: {
         flexDirection: 'row',
         margin: 10,
+        marginBottom:0,
         padding: 10,
         backgroundColor: '#FFFFFF',
         borderRadius: 2,
@@ -151,7 +188,7 @@ const styles = StyleSheet.create({
     },
     txtName: {
         paddingLeft: 20,
-        color: '#A7A7A7',
+        color: '#2d3436',
         fontSize: 20,
         fontWeight: '400',
         // fontFamily: 'Avenir'
@@ -159,7 +196,7 @@ const styles = StyleSheet.create({
     txtPrice: {
         paddingLeft: 20,
         color: '#C21C70',
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: '400',
         // fontFamily: 'Avenir'
     },

@@ -8,7 +8,6 @@ import {connect} from 'react-redux';
 
 const mapStateToProps = (state) => ({
     cart: state.cart,
-    itemCount: state.itemCount
 });
 
 class MyTabs extends Component {
@@ -16,7 +15,8 @@ class MyTabs extends Component {
     render() {
 
     const Tab = createMaterialBottomTabNavigator();
-
+    const arrayquantity = this.props.cart.map(e => e.quantity)
+    const itemCount = arrayquantity.length ? arrayquantity.reduce((a, b) => a + b) : 0;
 
     return (
         <Tab.Navigator
@@ -41,7 +41,7 @@ class MyTabs extends Component {
             name="ShoppingCart"
             component={ShoppingCartScreen}
             options={{
-            tabBarBadge: this.props.itemCount,
+            tabBarBadge: itemCount,
             tabBarLabel: 'My Cart',
             tabBarIcon: ({ color }) => (
                 <Zocial name="cart" color={color} size={26} />

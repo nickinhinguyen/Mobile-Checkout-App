@@ -23,7 +23,6 @@ class MyTabs extends Component {
     const Tab = createMaterialBottomTabNavigator();
     const arrayquantity = this.props.cart.map(e => e.quantity)
     const itemCount = arrayquantity.length ? arrayquantity.reduce((a, b) => a + b) : 0;
-
     return (
         <Tab.Navigator
         initialRouteName="HomeScreen"
@@ -74,5 +73,4 @@ class MyTabs extends Component {
     };}
 
     export default connect (mapStateToProps,null)(MyTabs);
-
 

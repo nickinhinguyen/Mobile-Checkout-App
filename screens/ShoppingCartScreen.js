@@ -78,6 +78,7 @@ class ShoppingCartScreen extends Component {
             </View>
         );
 }}
+
 export default connect (mapStateToProps,mapDispatchtoProps)(ShoppingCartScreen);
 
 const { width } = Dimensions.get('window');
@@ -106,6 +107,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         // fontFamily: 'Avenir'
     },
+
     addPromo:{
         flexDirection:'row',
         justifyContent:'space-between',
@@ -179,3 +181,4 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end'
     }
 });
+

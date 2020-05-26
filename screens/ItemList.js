@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View, StyleSheet,Text, Image, TouchableOpacity } from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
+
 import {connect} from 'react-redux'
 
 // function mapispatchtoProps(dispatch){
@@ -18,12 +19,10 @@ function mapDispatchtoProps(dispatch){
 class ItemList extends Component {
 
   render() {
-    // const { imageUri, name, priceOne, priceTwo } = this.props;
     const {item} = this.props;
+
     return (
-        <View
-          style={styles.container}
-        >
+        <View style={styles.container}>
           <View
             style={{
               width: wp("44%"),
@@ -41,10 +40,9 @@ class ItemList extends Component {
               marginHorizontal: 5
             }}
           >
-            <Text
-              style={styles.title}
-            >
+            <Text style={styles.title}>
               {item.title}
+
             </Text>
             <View
               style={{
@@ -121,7 +119,6 @@ const styles = StyleSheet.create({
     priceTwo: {
         fontSize: 12,
         textDecorationLine: "line-through",
-        
       }
   });
 

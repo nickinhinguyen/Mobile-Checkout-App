@@ -1,7 +1,17 @@
 const PRODUCTS = [
     {
+
+      id: 1,
+      imageUri: require("./assets/books/C_programming.jpg"),
+      title: "C Programming",
+      priceOne: 85,
+      priceTwo: "$120"
+
+    },
+    {
       id: 2,
       imageUri: require("./assets/books/confident_coding.jpg"),
+
       title: "Confident Coding",
       priceOne: 48,
       priceTwo: null
@@ -44,3 +54,4 @@ const PRODUCTS = [
   ];
 
 export default PRODUCTS;
+

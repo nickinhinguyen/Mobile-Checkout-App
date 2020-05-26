@@ -22,7 +22,9 @@ import {connect} from 'react-redux'
         <View style={styles.container}>
             {/* <Text >Home</Text> */}
             <Header
+
                 centerComponent={{ text: 'BOOKS', style: { color: 'rgba(127,63,191,.9)', fontSize:18, fontWeight:'bold' } }}
+
                 containerStyle={{
                     backgroundColor: '#FFF',
                 }}
@@ -45,7 +47,9 @@ import {connect} from 'react-redux'
 };
 
 
+
 export default (HomeScreen);
+
 
 const styles = StyleSheet.create({
   container: {

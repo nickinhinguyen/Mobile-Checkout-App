@@ -2,15 +2,27 @@ import React, { Component } from "react";
 import { View, StyleSheet,Text, Image, TouchableOpacity } from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 
+import {connect} from 'react-redux'
+
+// function mapispatchtoProps(dispatch){
+//   return{
+//     addItemsToCart : () => dispatch ({type:'ADD_TO_CART',payload:item})
+//   }
+// };
+
+function mapDispatchtoProps(dispatch){
+  return{
+    addItemsToCart : (item) => dispatch ({type:'ADD_TO_CART',payload:{item , quantity:1}}) 
+  }
+};
+
 class ItemList extends Component {
 
-  
   render() {
-    const { imageUri, name, priceOne, priceTwo } = this.props;
+    const {item} = this.props;
+
     return (
-        <View
-          style={styles.container}
-        >
+        <View style={styles.container}>
           <View
             style={{
               width: wp("44%"),
@@ -19,7 +31,7 @@ class ItemList extends Component {
             }}
           >
             <Image
-              source={imageUri}
+              source={item.imageUri}
               style={styles.image}
             />
           </View>
@@ -28,10 +40,9 @@ class ItemList extends Component {
               marginHorizontal: 5
             }}
           >
-            <Text
-              style={styles.title}
-            >
-              {name}
+            <Text style={styles.title}>
+              {item.title}
+
             </Text>
             <View
               style={{
@@ -43,22 +54,22 @@ class ItemList extends Component {
               <Text
                 style={styles.priceOne}
               >
-                ${priceOne}
+                ${item.priceOne}
               </Text>
               <Text
                 style={styles.priceTwo}
               >
-                {priceTwo}
+                {item.priceTwo}
               </Text>
             </View>
-            <TouchableOpacity style={
+            <TouchableOpacity onPress={()=> this.props.addItemsToCart(item)} style={
                 {borderRadius: 30,
-                margin: 10,
+                margin: 5,
                 backgroundColor: "#f3d23d",
                 alignItems: "center",
                 color: "#fff"}
             } >
-                <Text >Add item</Text>
+                <Text style={{padding:5, alignItems:"center", fontSize:16}} >Add item</Text>
             </TouchableOpacity> 
           </View>
         </View>
@@ -67,7 +78,7 @@ class ItemList extends Component {
   }
 }
 
-export default ItemList;
+export default connect (null,mapDispatchtoProps) (ItemList);
 
 const styles = StyleSheet.create({
     container: {
@@ -96,16 +107,18 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 18,
         color: "#63CBA7",
-        fontWeight: "bold"
+        fontWeight: "bold",
+        alignItems:"center",
+        marginHorizontal:10
       },
     priceOne:{
         fontSize: 14,
-        fontWeight: "bold"
+        fontWeight: "bold",
+        marginHorizontal:10
       },
     priceTwo: {
         fontSize: 12,
         textDecorationLine: "line-through",
-        marginLeft: 10
       }
   });
 

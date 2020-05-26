@@ -1,139 +1,85 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions, FlatList,Image} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, FlatList,Button,ScrollView} from 'react-native';
 import {Header} from 'react-native-elements';
 import { Component } from "react";
-const PRODUCTS = [
-    {
-      id: 1,
-      imageUri: require("../assets/books/C_programming.jpg"),
-      title: "C Programming",
-      priceOne: 120,
-      priceTwo: "$180"
-    },
-    {
-      id: 2,
-      imageUri: require("../assets/books/confident_coding.jpg"),
-      title: "Confident Coding",
-      priceOne: 180,
-      priceTwo: null
-    },
-    {
-      id: 3,
-      imageUri: require("../assets/books/happy_lemon.jpeg"),
-      title: "Happy Lemon",
-      priceOne: 80,
-      priceTwo: null
-    }
-  ];
+import {connect} from 'react-redux';
+import CartItem from './CartItem.js'
 
-class ShoppingCartScreen extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            cartArray: []
-        }
+
+const mapStateToProps = (state) => ({
+    cart: state.cart,
+    promo: state.promo,
+    promoCount: state.promoCount
+});
+
+function mapDispatchtoProps(dispatch){
+    return{
+      removePromo : () => dispatch ({type:'REMOVE_PROMO'}) 
     }
-   
+  };
+class ShoppingCartScreen extends Component {
+    
     render() {
+        const arrTotal = this.props.cart.map(e => e.product.priceOne * e.quantity);
+        const subtotal = arrTotal.length ? arrTotal.reduce((a, b) => a + b) : 0;
+        const tax = (subtotal*0.13);
+        const discount = subtotal * (this.props.promo/100)
+        const total = subtotal + tax + discount ;
+        
         const {
-            main, checkoutButton, wrapper, checkoutTitle, titleStyle,
-            productContainer, productImage,productStyle, lastRowInfo,
-            txtName, txtPrice, Image, mainRight, txtShowDetail
-         } = styles;
+            main, checkoutButton, wrapper, checkoutTitle,summary,summaryLine,addPromo} = styles;
          return (
              
             <View style={wrapper}>
-                 <Header
-                    centerComponent={{ text: 'MY CART', style: { color: '#000', fontSize:18 } }}
-                    containerStyle={{backgroundColor: '#FFF',}}
-            />
-
-                <FlatList
-                    contentContainerStyle={main}
-                    enableEmptySections
-                    // dataSource={new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }).cloneWithRows(cartArray)}
-                    data = {PRODUCTS}
-                    renderItem={({ item }) => <Item title={item.title} imageUri={item.imageUri} price={item.priceOne}/>}
-                    keyExtractor={item => item.id}
-                        // <View style={productStyle}>
-                        //     {/* <Image source={{ uri: `${url}${cartItem.product.images[0]}` }} style={productImage} /> */}
-                        //     <Image source={cartItem.imageUri}  style={productImage} />
-
+                 
+                <ScrollView>
+                    <View>
+                        <FlatList
+                            contentContainerStyle={main}
+                            enableEmptySections
+                            data = {this.props.cart}
+                            renderItem={({item}) => <CartItem title={item.product.title} imageUri={item.product.imageUri} price={item.product.priceOne} id={item.product.id} item={item}/>}
+                            keyExtractor={item => item.id}
                             
-                        //     <View style={[mainRight]}>
-                        //         <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
-                        //             {/* <Text style={txtName}>{toTitleCase(cartItem.title)}</Text> */}
-                        //             <Text style={txtName}>{cartItem.title}</Text>
-                        //             <TouchableOpacity onPress={() => this.removeProduct(cartItem.id)}>
-                        //                 <Text style={{ fontFamily: 'Avenir', color: '#969696' }}>X</Text>
-                        //             </TouchableOpacity>
-                        //         </View>
-                        //         <View>
-                        //             {/* <Text style={txtPrice}>{cartItem.product.price}$</Text> */}
-                        //             <Text style={txtPrice}>$100</Text>
-                                    
-                        //         </View>
-                        //         {/* <View style={productController}>
-                        //             <View style={numberOfProduct}>
-                        //                 <TouchableOpacity onPress={() => this.incrQuantity(cartItem.product.id)}>
-                        //                     <Text>+</Text>
-                        //                 </TouchableOpacity>
-                        //                 <Text>{cartItem.quantity}</Text>
-                        //                 <TouchableOpacity onPress={() => this.decrQuantity(cartItem.product.id)}>
-                        //                     <Text>-</Text>
-                        //                 </TouchableOpacity>
-                        //             </View>
-                        //         </View> */}
-                        //     </View>
-                        // </View>
-                />
-                {/* <TouchableOpacity style={checkoutButton} onPress={this.onSendOrder.bind(this)}> */}
+                        />
+                      
+                    </View>
+
+                <View  style={addPromo}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Promo')}>
+                        <Text style={{color:'#2ABB9C',fontWeight:'bold'}}>Add Promotion  </Text>
+                        <Text style={{color:'#000'}}>{this.props.promoCount} promo used </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.props.removePromo()}>
+                        <Text style={{color:"#0984e3"}} >remove promo</Text>
+                    </TouchableOpacity>
+                </View>   
+                
+                
+                <View style={summary} >
+                    <View style={summaryLine}>
+                        <Text>Order Subtotal    </Text>
+                        <Text> ${subtotal.toFixed(2)}</Text>
+                    </View >
+                    <View style={summaryLine}>
+                        <Text>Tax (13%)   </Text>
+                        <Text> ${tax.toFixed(2)}</Text>
+                    </View>
+                    <View style={summaryLine}>
+                        <Text>Promotion  </Text>
+                        <Text>${discount.toFixed(2)}</Text>
+                    </View>
+                    
+                </View>
+                    </ScrollView>
                 <TouchableOpacity style={checkoutButton} >
-                    {/* <Text style={checkoutTitle}>TOTAL {total}$ CHECKOUT NOW</Text> */}
-                    <Text style={checkoutTitle}>TOTAL $100 CHECKOUT NOW</Text>
+                    <Text style={checkoutTitle}>TOTAL ${total.toFixed(2)} CHECKOUT NOW</Text>
                 </TouchableOpacity>
             </View>
         );
 }}
 
-
-export default ShoppingCartScreen;
-
-function Item({title, imageUri, price }) {
-    return (
-        <View style={styles.productStyle}>
-        {/* <Image source={{ uri: `${url}${cartItem.product.images[0]}` }} style={productImage} /> */}
-        <Image source={imageUri}  style={styles.productImage} />
-
-        
-        <View style={[styles.mainRight]}>
-            <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
-                {/* <Text style={txtName}>{toTitleCase(cartItem.title)}</Text> */}
-                <Text style={styles.txtName}>{title}</Text>
-                <TouchableOpacity onPress={() => this.removeProduct(cartItem.id)}>
-                    <Text style={{  color: '#969696' }}>X</Text>
-                </TouchableOpacity>
-            </View>
-            <View>
-                {/* <Text style={txtPrice}>{cartItem.product.price}$</Text> */}
-                <Text style={styles.txtPrice}>{price}</Text>
-                
-            </View>
-            {/* <View style={productController}>
-                <View style={numberOfProduct}>
-                    <TouchableOpacity onPress={() => this.incrQuantity(cartItem.product.id)}>
-                        <Text>+</Text>
-                    </TouchableOpacity>
-                    <Text>{cartItem.quantity}</Text>
-                    <TouchableOpacity onPress={() => this.decrQuantity(cartItem.product.id)}>
-                        <Text>-</Text>
-                    </TouchableOpacity>
-                </View>
-            </View> */}
-        </View>
-    </View>
-    );
-  }
+export default connect (mapStateToProps,mapDispatchtoProps)(ShoppingCartScreen);
 
 const { width } = Dimensions.get('window');
 const imageWidth = width / 4;
@@ -161,9 +107,28 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         // fontFamily: 'Avenir'
     },
+
+    addPromo:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+        backgroundColor: '#FFFFFF',
+        margin: 10,
+        padding: 10,
+    },
+    summary:{
+        backgroundColor: '#FFFFFF',
+        margin: 10,
+        padding: 10,
+       
+    },
+    summaryLine:{
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
     productStyle: {
         flexDirection: 'row',
         margin: 10,
+        marginBottom:0,
         padding: 10,
         backgroundColor: '#FFFFFF',
         borderRadius: 2,
@@ -191,7 +156,7 @@ const styles = StyleSheet.create({
     },
     txtName: {
         paddingLeft: 20,
-        color: '#A7A7A7',
+        color: '#2d3436',
         fontSize: 20,
         fontWeight: '400',
         // fontFamily: 'Avenir'
@@ -199,7 +164,7 @@ const styles = StyleSheet.create({
     txtPrice: {
         paddingLeft: 20,
         color: '#C21C70',
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: '400',
         // fontFamily: 'Avenir'
     },
@@ -216,3 +181,4 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end'
     }
 });
+

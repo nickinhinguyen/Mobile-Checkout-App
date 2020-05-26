@@ -2,15 +2,27 @@ import React,{ Component } from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Zocial } from '@expo/vector-icons';
-import ShoppingCartScreen from './ShoppingCartScreen';
+import CheckoutNavigator from './CheckoutNavigator.js';
+import PromotionScreen from './PromotionScreen';
+
 import HomeScreen from './HomeScreen';
+import {connect} from 'react-redux';
+
+
+const mapStateToProps = (state) => ({
+    cart: state.cart,
+});
+
+
+
 
 class MyTabs extends Component {
+    
     render() {
 
     const Tab = createMaterialBottomTabNavigator();
-
-
+    const arrayquantity = this.props.cart.map(e => e.quantity)
+    const itemCount = arrayquantity.length ? arrayquantity.reduce((a, b) => a + b) : 0;
     return (
         <Tab.Navigator
         initialRouteName="HomeScreen"
@@ -30,11 +42,23 @@ class MyTabs extends Component {
             }}
         />
         
-        <Tab.Screen
+        {/* <Tab.Screen
             name="ShoppingCart"
             component={ShoppingCartScreen}
             options={{
-            tabBarBadge: 4,
+            tabBarBadge: itemCount,
+            tabBarLabel: 'My Cart',
+            tabBarIcon: ({ color }) => (
+                <Zocial name="cart" color={color} size={26} />
+            ),
+            }}
+            
+        /> */}
+        <Tab.Screen
+            name="AppNavigator"
+            component={CheckoutNavigator}
+            options={{
+            tabBarBadge: itemCount,
             tabBarLabel: 'My Cart',
             tabBarIcon: ({ color }) => (
                 <Zocial name="cart" color={color} size={26} />
@@ -48,4 +72,5 @@ class MyTabs extends Component {
     );
     };}
 
-    export default MyTabs;
+    export default connect (mapStateToProps,null)(MyTabs);
+

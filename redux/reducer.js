@@ -9,7 +9,6 @@ const initialState = {
 export default function(state=initialState, action) {
     switch(action.type){
         case 'ADD_TO_CART':
-            // check for dublicate item
             const product = action.payload.item
             const quantity = action.payload.quantity
             const existsInArray = state.cart.some(l => l.product.id === product.id)

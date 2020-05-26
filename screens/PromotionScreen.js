@@ -33,7 +33,6 @@ class PromotionScreen extends Component {
 
     state = {
         userPromo: '',
-  
      }
     render() {
     return (
@@ -55,7 +54,6 @@ class PromotionScreen extends Component {
             
     );
   };};
-// export default PromotionScreen;
 
 export default connect (null,mapDispatchtoProps)(PromotionScreen);
 

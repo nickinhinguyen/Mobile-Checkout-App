@@ -1,6 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions, FlatList,Image,ScrollView} from 'react-native';
-import {Header} from 'react-native-elements';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions,Image} from 'react-native';
 import { Component } from "react";
 import {connect} from 'react-redux';
 
@@ -42,12 +41,10 @@ class CartItem extends Component{
                 
                     <View style={styles.numberOfProduct}>
                     <Text style={{fontWeight: 'bold'}}>quanity:</Text>
-                        {/* <TouchableOpacity onPress={() => this.incrQuantity(cartItem.product.id)}> */}
                         <TouchableOpacity onPress={()=>this.props.increaseQty(id)} >
                             <Text style={{  color: '#0984e3', fontSize:20 }}>+</Text>
                         </TouchableOpacity >
                         <Text>{item.quantity}</Text>
-                        {/* <TouchableOpacity onPress={() => this.decrQuantity(cartItem.product.id)}> */}
                         <TouchableOpacity onPress={()=>this.props.decreaseQty(id)}>
                             <Text style={{  color: '#0984e3', fontSize:20 }}>-</Text>
                         </TouchableOpacity>
@@ -70,24 +67,10 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#DFDFDF'
     },
-    checkoutButton: {
-        height: 50,
-        margin: 10,
-        marginTop: 0,
-        backgroundColor: '#2ABB9C',
-        borderRadius: 2,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
     main: {
         width, backgroundColor: '#DFDFDF'
     },
-    checkoutTitle: {
-        color: '#FFF',
-        fontSize: 15,
-        fontWeight: 'bold',
-        // fontFamily: 'Avenir'
-    },
+    
     summary:{
         backgroundColor: '#FFFFFF',
         margin: 10,

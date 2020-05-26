@@ -1,5 +1,6 @@
 const PRODUCTS = [
     {
+
       id: 1,
       imageUri: require("./assets/books/C_programming.jpg"),
       title: "C Programming",
@@ -35,6 +36,13 @@ const PRODUCTS = [
       title: "Very Nice",
       priceOne: 80,
       priceTwo: null
+    },
+    {
+      id: 1,
+      imageUri: require("./assets/books/C_programming.jpg"),
+      title: "C Programming",
+      priceOne: 85,
+      priceTwo: "$120"
     },
     {
       id: 6,

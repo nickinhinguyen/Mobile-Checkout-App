@@ -3,7 +3,6 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Zocial } from '@expo/vector-icons';
 import CheckoutNavigator from './CheckoutNavigator.js';
-import PromotionScreen from './PromotionScreen';
 
 import HomeScreen from './HomeScreen';
 import {connect} from 'react-redux';
@@ -42,18 +41,6 @@ class MyTabs extends Component {
             }}
         />
         
-        {/* <Tab.Screen
-            name="ShoppingCart"
-            component={ShoppingCartScreen}
-            options={{
-            tabBarBadge: itemCount,
-            tabBarLabel: 'My Cart',
-            tabBarIcon: ({ color }) => (
-                <Zocial name="cart" color={color} size={26} />
-            ),
-            }}
-            
-        /> */}
         <Tab.Screen
             name="AppNavigator"
             component={CheckoutNavigator}
@@ -66,8 +53,6 @@ class MyTabs extends Component {
             }}
             
         />
-        
-        
         </Tab.Navigator>
     );
     };}

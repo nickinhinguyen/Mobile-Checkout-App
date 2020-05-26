@@ -1,6 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions, FlatList,Button,ScrollView} from 'react-native';
-import {Header} from 'react-native-elements';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, FlatList,ScrollView} from 'react-native';
 import { Component } from "react";
 import {connect} from 'react-redux';
 import CartItem from './CartItem.js'
@@ -40,13 +39,11 @@ class ShoppingCartScreen extends Component {
                             data = {this.props.cart}
                             renderItem={({item}) => <CartItem title={item.product.title} imageUri={item.product.imageUri} price={item.product.priceOne} id={item.product.id} item={item}/>}
                             keyExtractor={item => item.id}
-                            
                         />
-                      
                     </View>
 
                 <View  style={addPromo}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Promo')}>
+                    <TouchableOpacity style={{flexGrow:2}} onPress={() => this.props.navigation.navigate('Promo')}>
                         <Text style={{color:'#2ABB9C',fontWeight:'bold'}}>Add Promotion  </Text>
                         <Text style={{color:'#000'}}>{this.props.promoCount} promo used </Text>
                     </TouchableOpacity>
@@ -82,8 +79,6 @@ class ShoppingCartScreen extends Component {
 export default connect (mapStateToProps,mapDispatchtoProps)(ShoppingCartScreen);
 
 const { width } = Dimensions.get('window');
-const imageWidth = width / 4;
-const imageHeight = (imageWidth * 452) / 361;
 const styles = StyleSheet.create({
     wrapper: {
         flex: 1,
@@ -124,61 +119,6 @@ const styles = StyleSheet.create({
     summaryLine:{
         flexDirection: 'row',
         justifyContent: 'space-between'
-    },
-    productStyle: {
-        flexDirection: 'row',
-        margin: 10,
-        marginBottom:0,
-        padding: 10,
-        backgroundColor: '#FFFFFF',
-        borderRadius: 2,
-        shadowColor: '#3B5458',
-        shadowOffset: { width: 0, height: 3 },
-        shadowOpacity: 0.2
-    },
-    productImage: {
-        width: imageWidth,
-        height: imageHeight,
-        flex: 1,
-        resizeMode: 'center'
-    },
-    mainRight: {
-        flex: 3,
-        justifyContent: 'space-between'
-    },
-    productController: {
-        flexDirection: 'row'
-    },
-    numberOfProduct: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-around'
-    },
-    txtName: {
-        paddingLeft: 20,
-        color: '#2d3436',
-        fontSize: 20,
-        fontWeight: '400',
-        // fontFamily: 'Avenir'
-    },
-    txtPrice: {
-        paddingLeft: 20,
-        color: '#C21C70',
-        fontSize: 18,
-        fontWeight: '400',
-        // fontFamily: 'Avenir'
-    },
-    txtShowDetail: {
-        color: '#C21C70',
-        fontSize: 10,
-        fontWeight: '400',
-        // fontFamily: 'Avenir',
-        textAlign: 'right',
-    },
-    showDetailContainer: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'flex-end'
     }
 });
 

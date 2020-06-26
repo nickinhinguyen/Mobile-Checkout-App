@@ -4,7 +4,7 @@
 * The application is published on Expo: 
 ***https://expo.io/@ayukiie/Shopping-Cart***
 
-<img src="MobileApp/demo.gif?raw=true" width=300 >
+<img src="demo.gif?raw=true" width=300 >
 
 
 ## Instructions for testing
